@@ -86,12 +86,17 @@
       // setInterval(function(){ showTime()}, 1000);
 
 
-      window.addEventListener("devicelight", function (event) {
-        // Read out the lux value
-      let lux = event.value;
-      console.error(event.error);
-      displayTime.innerHTML = lux;
-});
+      if ( 'AmbientLightSensor' in window ) {
+        const sensor = new AmbientLightSensor();
+        sensor.onreading = () => {
+          console.log('Current light level:', sensor.illuminance);
+        };
+        sensor.onerror = (event) => {
+          console.log(event.error.name, event.error.message);
+        };
+        sensor.start();
+      }
+
     </script>
   </body>
 </html>
