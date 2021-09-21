@@ -83,11 +83,14 @@
         tonySpeak(speakText);
       }
 
-      setInterval(function(){ showTime()}, 1000);
+      // setInterval(function(){ showTime()}, 1000);
 
 
-      const sensor = new AmbientLightSensor()
-      sensor.onreading = () => body.innerText = "It works" + sensor.illuminance;
+      window.addEventListener("devicelight", function (event) {
+        // Read out the lux value
+      var lux = event.value;
+      displayTime.innerText = lux;
+});
     </script>
   </body>
 </html>
