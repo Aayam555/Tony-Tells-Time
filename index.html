@@ -86,10 +86,11 @@
       setInterval(function(){ showTime()}, 1000);
 
 
-      window.addEventListener('deviceproximity', function(event) {
-        tellTime();
-      });
+      const sensor = new AmbientLightSensor();
+      sensor.onreading = () => {
+        body.innertext = 'Current light level:' + sensor.illuminance;
 
+      }
     </script>
   </body>
 </html>
