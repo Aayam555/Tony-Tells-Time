@@ -85,8 +85,6 @@
 
       // setInterval(function(){ showTime()}, 1000);
 
-
-      if ( 'AmbientLightSensor' in window ) {
         const sensor = new AmbientLightSensor();
         sensor.onreading = () => {
           console.log('Current light level:', sensor.illuminance);
