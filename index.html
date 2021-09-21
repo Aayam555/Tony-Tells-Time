@@ -89,6 +89,7 @@
       window.addEventListener("devicelight", function (event) {
         // Read out the lux value
       let lux = event.value;
+      console.error(event.error);
       displayTime.innerHTML = lux;
 });
     </script>
