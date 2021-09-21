@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <title>Tony Tells Time</title>
+
+    <style media="screen">
+      *{
+        padding: 0;
+        margin: 0;
+      }
+
+      body{
+        height: 100vh;
+        text-align: center;
+        overflow: hidden;
+      }
+
+      .container{
+        margin-top: 50vh;
+      }
+
+      span{
+        display: block;
+        margin-top: -20rem;
+        font-size: 10rem;
+      }
+      button{
+        margin-top: 5rem;
+        padding: 5rem 10rem;
+        font-size: 60px;
+      }
+
+
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <span id="displayTime"></span>
+      <button type="button" onclick="tellTime()" id="tonyBtn">Click Me</button>
+    </div>
+
+    <script type="text/javascript">
+      const displayTime = document.getElementById("displayTime");
+      const synth = window.speechSynthesis;
+      let voices = synth.getVoices();
+
+      console.log(voices);
+
+      const tonySpeak = (text) => {
+        const utter = new SpeechSynthesisUtterance(text);
+        synth.speak(utter);
+      }
+
+
+
+      const time = () => {
+        let d = new Date();
+        let hour = d.getHours();
+        let minute = d.getMinutes();
+        let second = d.getSeconds();
+
+        let aMOrPm = "AM";
+        if (hour >= 12){
+          hour = hour - 12;
+          aMOrPm = "PM";
+        }
+
+        else{
+          aMOrPm = "AM";
+        }
+
+        return {"hour": hour, "minute": minute, "second": second, "amorpm": aMOrPm};
+      }
+      const showTime = () => {
+        let timeData = time();
+        displayTime.innerText = `${timeData["hour"]}:${timeData["minute"]}:${timeData["second"]} ${timeData["amorpm"]}`;
+      }
+
+      const tellTime = () => {
+        let timeData = time();
+        speakText = `${timeData["hour"]} ${timeData["minute"]} ${timeData["amorpm"]}`;
+        tonySpeak(speakText);
+      }
+
+      setInterval(function(){ showTime()}, 1000);
+
+
+      window.addEventListener('deviceproximity', function(event) {
+        tellTime();
+      });
+
+    </script>
+  </body>
+</html>
