@@ -85,15 +85,15 @@
 
       setInterval(function(){ showTime()}, 1000);
 
-        const sensor = new AmbientLightSensor();
-        sensor.onreading = () => {
-          if (sensor.illuminance == 0){
-            tellTime();
-        };
-        sensor.onerror = (event) => {
-          console.log(event.error.name, event.error.message);
-        };
-        sensor.start();
+      const sensor = new AmbientLightSensor();
+      sensor.onreading = () => {
+        if (sensor.illuminance == 0){
+          tellTime();
+      };
+      sensor.onerror = (event) => {
+        console.log(event.error.name, event.error.message);
+      };
+      sensor.start();
 
     </script>
   </body>
