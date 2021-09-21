@@ -86,11 +86,8 @@
       setInterval(function(){ showTime()}, 1000);
 
 
-      const sensor = new AmbientLightSensor();
-      sensor.onreading = () => {
-        body.innertext = 'Current light level:' + sensor.illuminance;
-
-      }
+      const sensor = new AmbientLightSensor()
+      sensor.onreading = () => body.innerText = "It works" + sensor.illuminance;
     </script>
   </body>
 </html>
