@@ -13,7 +13,6 @@
       body{
         height: 100vh;
         text-align: center;
-        overflow: hidden;
       }
 
       .container{
@@ -31,6 +30,11 @@
         font-size: 60px;
       }
 
+      canvas{}
+
+      video{
+        display: none;
+      }
 
     </style>
   </head>
@@ -38,6 +42,8 @@
     <div class="container">
       <span id="displayTime"></span>
       <button type="button" onclick="tellTime()" id="tonyBtn">Click Me</button>
+      <video id="video" autoplay></video>
+      <canvas id="canvas" width="300" height="300"></canvas>
     </div>
 
     <script type="text/javascript">
@@ -85,16 +91,48 @@
 
       setInterval(function(){ showTime()}, 1000);
 
-      const sensor = new AmbientLightSensor();
-      sensor.onreading = () => {
-        if (sensor.illuminance == 0){
-          tellTime();
+      const liveVideo = document.getElementById("video");
+      const canvas = document.getElementById("canvas");
+      navigator.mediaDevices.getUserMedia({video: true}).then((stream) => {
+        liveVideo.srcObject = stream;
+      })
+
+      const ctx = canvas.getContext("2d");
+
+      let firstTime = true;
+
+      function detectBrightness(){
+        const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+        const data = imageData.data;
+        let r, g, b, avg;
+
+        let colorSum = 0;
+
+        for(let dataIndex=0, len=data.length; dataIndex<len; dataIndex+=4) {
+          r = data[dataIndex];
+          g = data[dataIndex+1];
+          b = data[dataIndex+2];
+          avg = Math.floor((r+g+b)/3);
+          colorSum += avg;
         }
-      };
-      sensor.onerror = (event) => {
-        console.log(event.error.name, event.error.message);
-      };
-      sensor.start();
+
+        let brightness = Math.floor(colorSum / (canvas.width * canvas.height));
+
+        if (brightness == 0 && firstTime == true){
+          tellTime();
+          firstTime = false;
+        } else if (brightness != 0 && firstTime == false){ firstTime = true }
+      }
+
+      liveVideo.addEventListener("play", () => {
+        function updateVideo(){
+          ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+        }
+        setInterval(function(){
+          detectBrightness();
+          requestAnimationFrame(updateVideo)
+        }, 1);
+      })
 
     </script>
   </body>
