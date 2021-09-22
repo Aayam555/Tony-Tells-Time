@@ -95,7 +95,7 @@
 
       const liveVideo = document.getElementById("video");
       const canvas = document.getElementById("canvas");
-      navigator.mediaDevices.getUserMedia({video: true}).then((stream) => {
+      navigator.mediaDevices.getUserMedia({video: {facingMode: "environment"}}).then((stream) => {
         liveVideo.srcObject = stream;
       })
 
